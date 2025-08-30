@@ -1,7 +1,7 @@
 class CBOT:
     API_ID = 28932643
     API_HASH = "3fb38bb53a7d33fb42ea208c6f77830b"
-    BOT_TOKEN = ""
+    BOT_TOKEN = "8047031862:AAGe6MiNReCzybi-QKAoVrF-XwChJ8XdoZ0"
     LOG_FILE_NAME = "nkbot"
     LOG_GROUP_ID = -1002828344230
     BANNER_IMG_URL = "https://files.catbox.moe/k5o3lc.jpg"
