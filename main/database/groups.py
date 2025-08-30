@@ -1,3 +1,4 @@
+# database/groups.py
 from motor.motor_asyncio import AsyncIOMotorCollection
 from pymongo.results import UpdateResult, InsertOneResult
 from typing import Union, Optional
@@ -9,8 +10,8 @@ class GroupsDB:
 
     async def get_group(self, chat_id: Union[int, str]) -> Optional[dict]:
         return await self.collection.find_one({"chat_id": str(chat_id)})
-    
-    async def add_group(self, chat_id: Union[int, str], state) -> bool:
+
+    async def add_group(self, chat_id: Union[int, str], state=False) -> bool:
         chat_id = str(chat_id)
         existing_group = await self.get_group(chat_id)
         if existing_group:
@@ -20,19 +21,20 @@ class GroupsDB:
             )
             return update_result.modified_count > 0
         else:
-            insert_result: InsertOneResult = await self.collection.insert_one({
-                "chat_id": chat_id,
-                "antibc_state": state,
-            })
+            insert_result: InsertOneResult = await self.collection.insert_one(
+                {"chat_id": chat_id, "antibc_state": state}
+            )
             return insert_result.inserted_id is not None
-        
+
     async def get_antibc_state(self, chat_id: Union[int, str]) -> bool:
         group_info = await self.get_group(str(chat_id))
-        return group_info.get('antibc_state', False) if group_info else False
+        return group_info.get("antibc_state", False) if group_info else False
 
     async def count_all_groups(self) -> int:
         return await self.collection.count_documents({})
 
     async def get_all_groups(self):
         cursor = self.collection.find({})
-        return [doc["chat_id"] for doc in await cursor.to_list(length=None)]
+        docs = await cursor.to_list(length=None)
+        # return sebagai int supaya bisa dipakai pyrogram
+        return [int(doc["chat_id"]) for doc in docs if "chat_id" in doc]
