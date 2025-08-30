@@ -1,0 +1,10 @@
+pyrofork
+Navygram
+tgcrypto
+tornado
+pykeyboard
+motor
+unidecode
+nltk
+Metaphone
+levenshtein
