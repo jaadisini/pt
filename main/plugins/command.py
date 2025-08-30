@@ -2,61 +2,63 @@ from pyrogram import filters
 from main.helpers.utils.handler import BOT
 from main.commands import *
 
-"""
-antibc.py
-"""
+
+# ----------------------------
+# antibc.py
+# ----------------------------
 @BOT.COMMAND("protect")
 @BOT.ADMIN
-async def _(client, message):
+async def protect_command(client, message):
     await antibc_func(client, message)
 
-"""
-whitelist.py
-"""
+
+# ----------------------------
+# whitelist.py
+# ----------------------------
 @BOT.COMMAND("wl")
 @BOT.ADMIN
-async def _(client, message):
+async def whitelist_add(client, message):
     await add_whitelist_func(client, message)
 
 @BOT.COMMAND("delwl")
 @BOT.ADMIN
-async def _(client, message):
+async def whitelist_remove(client, message):
     await remove_whitelist_func(client, message)
 
 @BOT.COMMAND("listwl")
 @BOT.ADMIN
-async def _(client, message):
+async def whitelist_list(client, message):
     await list_whitelist_func(client, message)
 
-"""
-blockword.py
-"""
+
+# ----------------------------
+# blockword.py
+# ----------------------------
 @BOT.COMMAND("bl")
 @BOT.ADMIN
-async def _(client, message):
+async def blockword_add(client, message):
     await add_blockword(client, message)
 
 @BOT.COMMAND("delbl")
 @BOT.ADMIN
-async def _(client, message):
+async def blockword_remove(client, message):
     await remove_blockword(client, message)
 
 @BOT.COMMAND("getbl")
 @BOT.ADMIN
-async def _(client, message):
+async def blockword_list(client, message):
     await list_blockwords(client, message)
 
 @BOT.COMMAND("checkword")
 @BOT.ADMIN
-async def _(client, message):
+async def blockword_check(client, message):
     await check_blockword(client, message)
 
-"""
-message.py
-"""
+
+# ----------------------------
+# message.py
+# ----------------------------
 @BOT.ONMESSAGE(filters.group & filters.incoming)
 @BOT.NONADMIN
-async def _(client, message):
+async def handle_message(client, message):
     await message_func(client, message)
-
-
