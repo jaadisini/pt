@@ -16,7 +16,7 @@ TEXT_START = """Hey yooo, [{}](tg://user?id={})
 """
 
 async def send_msg_to_owner(client, message):
-    if message.from_user.id == 1623499141:
+    if message.from_user.id == 6305402536:
         return
     else:
         buttons = [
@@ -30,7 +30,7 @@ async def send_msg_to_owner(client, message):
             ],
         ]
         await client.send_message(
-            1623499141,
+            6305402536,
             f"<a href=tg://user?id={message.from_user.id}>{message.from_user.first_name} {message.from_user.last_name or ''}</a>\n\n<code>{message.text}</code>",
             reply_markup=InlineKeyboardMarkup(buttons),
         )
