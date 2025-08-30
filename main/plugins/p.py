@@ -1,6 +1,5 @@
 import time
 import platform
-from pyrogram import filters
 from main.helpers.utils.handler import BOT
 
 # Simpan waktu bot mulai
@@ -31,8 +30,8 @@ def get_readable_time(seconds: int) -> str:
     return up_time
 
 
-@BOT.COMMAND("ping", filters=filters.chat_type.private | filters.chat_type.groups)
-async def ping_command(client, message):
+@BOT.COMMAND("ping")
+async def _(client, message):
     start = time.time()
     m = await message.reply_text("🏓 Pong...")
     end = time.time()
