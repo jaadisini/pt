@@ -6,9 +6,9 @@ from main.database import groupdb
 from main import bot
 from config import CBOT, COWNER, DEV
 
-TEXT_START = """Hey yooo, [{}](tg://user?id={})
+TEXT_START = """Hai, [{}](tg://user?id={})
 
-**Telah digunakan oleh :** `{}` group
+**Telah digunakan :** `{}` group
 
 <blockquote>I am an AntiGcast bot whose job is to automatically delete Gcast in your group.</blockquote>
 """
