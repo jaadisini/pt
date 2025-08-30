@@ -5,9 +5,9 @@ from main.database import userdb, groupdb
 __MODULE__ = "Approve"
 __DESCRIPTION__ = "<blockquote>#ApproveUser</blockquote>"
 __COMMANDS__ = """
-⦿ /approve [user_id / reply]: `Menambahkan user agar pesan tidak dihapus.`
-⦿ /unapprove [user_id / reply]: `Menghapus dari daftar approved.`
-⦿ /listapprove : `Melihat daftar Approved.`
+⦿ /wl [user_id / reply]: `Menambahkan user agar pesan tidak dihapus.`
+⦿ /delwl [user_id / reply]: `Menghapus dari daftar whitelist.`
+⦿ /listwl : `Melihat daftar Whitelist.`
 """
 
 __ISPRO__ = False
