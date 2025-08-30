@@ -1,18 +1,16 @@
 from pyrogram import filters
-from pykeyboard import InlineButton, InlineKeyboard
-from pyrogram.types import InlineKeyboardMarkup, Message, InlineKeyboardButton
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from main.helpers.utils.handler import BOT
 from main.database import groupdb
 from main import bot
-from config import CBOT,COWNER
-from config import DEV
+from config import CBOT, COWNER, DEV
 
 TEXT_START = """Hey yooo, [{}](tg://user?id={})
 
 **Telah digunakan oleh :** `{}` group
 
-<blockquote> I am an AntiGcast bot whose job is to automatically delete Gcast in your group.</blockquote>
+<blockquote>I am an AntiGcast bot whose job is to automatically delete Gcast in your group.</blockquote>
 """
 
 async def send_msg_to_owner(client, message):
@@ -29,35 +27,41 @@ async def send_msg_to_owner(client, message):
                 ),
             ],
         ]
-        await client.send_message(
-            6305402536,
-            f"<a href=tg://user?id={message.from_user.id}>{message.from_user.first_name} {message.from_user.last_name or ''}</a>\n\n<code>{message.text}</code>",
-            reply_markup=InlineKeyboardMarkup(buttons),
+        markup = InlineKeyboardMarkup(buttons)
+        text = (
+            f"<a href=tg://user?id={message.from_user.id}>"
+            f"{message.from_user.first_name} {message.from_user.last_name or ''}</a>\n\n"
+            f"<code>{message.text}</code>"
         )
-	await client.send_message(
-            DEV,
-            f"<a href=tg://user?id={message.from_user.id}>{message.from_user.first_name} {message.from_user.last_name or ''}</a>\n\n<code>{message.text}</code>",
-            reply_markup=InlineKeyboardMarkup(buttons),
-        )
+
+        await client.send_message(6305402536, text, reply_markup=markup)
+        await client.send_message(DEV, text, reply_markup=markup)
 
 
 @BOT.COMMAND("start", filters.private)
 async def start_command(client, message):
     await send_msg_to_owner(client, message)
+
     user = message.from_user
     group_count = await groupdb.count_all_groups()
     text = TEXT_START.format(user.mention, user.id, group_count)
-    keyboard = InlineKeyboard()
-    keyboard.row(InlineButton("✚ Add To Your Grup", url=f"https://t.me/{bot.me.username}?startgroup=true"))
-    keyboard.row(
-        InlineButton("Commands", "CB_HELP"),
-        InlineButton("Owner", url=f"https://t.me/{COWNER.OWNER_USERNAME}"),
+
+    # pastikan sudah ada bot.me.username (diinit saat start bot)
+    username = (await bot.get_me()).username
+
+    keyboard = InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton("✚ Add To Your Group", url=f"https://t.me/{username}?startgroup=true")],
+            [
+                InlineKeyboardButton("Commands", callback_data="CB_HELP"),
+                InlineKeyboardButton("Owner", url=f"https://t.me/{COWNER.OWNER_USERNAME}"),
+            ],
+            [InlineKeyboardButton("Close", callback_data="CB_CLOSE")],
+        ]
     )
-    keyboard.row(InlineButton("Close", "CB_CLOSE"))
 
     return await message.reply_photo(
         photo=CBOT.BANNER_IMG_URL,
         caption=text,
         reply_markup=keyboard,
     )
-
