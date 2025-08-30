@@ -1,1 +1,1 @@
-from main.callbacks import *
+from main.callback import *
