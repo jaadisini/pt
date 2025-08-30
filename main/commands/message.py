@@ -20,7 +20,7 @@ async def message_func(client, message):
                 else "."
             )
             await message.delete()
-            await notification(message, f", {mention} Pesan anda telah dihapus karena terdeteksi sebagai broadcast.\n subs channel t.me/Share_SourcCode")
+            await notification(message, f", {mention} Pesan anda telah dihapus karena terdeteksi sebagai broadcast.
             return
         
         if any(similarity_checker.is_similar(word, blocked_word) 
@@ -32,7 +32,7 @@ async def message_func(client, message):
                 else "."
             )
             await message.delete()
-            await notification(message, f", {mention} Pesan anda telah dihapus karena terdeteksi sebagai broadcast.\n subs channel t.me/Share_SourcCode")
+            await notification(message, f", {mention} Pesan anda telah dihapus karena terdeteksi sebagai broadcast.")
             return
 
     return
