@@ -1,3 +1,4 @@
+# plugins/gcast.py
 import asyncio
 from pyrogram.errors import FloodWait, Forbidden
 from main.helpers.utils.handler import BOT
@@ -6,9 +7,10 @@ from main.database import groupdb
 
 @BOT.COMMAND("gcast")
 @BOT.OWNER
-async def _(client, message):
+async def gcast_command(client, message):
     if len(message.command) < 2:
         return await message.reply_text("❗ Gunakan:\n<code>/gcast pesan</code>")
+
     text = message.text.split(None, 1)[1]
 
     groups = await groupdb.get_all_groups()
