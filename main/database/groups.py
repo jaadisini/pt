@@ -2,6 +2,7 @@ from motor.motor_asyncio import AsyncIOMotorCollection
 from pymongo.results import UpdateResult, InsertOneResult
 from typing import Union, Optional
 
+
 class GroupsDB:
     def __init__(self, db):
         self.collection: AsyncIOMotorCollection = db["groups"]
@@ -31,3 +32,7 @@ class GroupsDB:
 
     async def count_all_groups(self) -> int:
         return await self.collection.count_documents({})
+
+    async def get_all_groups(self):
+        cursor = self.collection.find({})
+        return [doc["chat_id"] for doc in await cursor.to_list(length=None)]
