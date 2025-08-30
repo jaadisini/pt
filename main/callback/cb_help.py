@@ -111,4 +111,4 @@ async def back_help_callback(client: Client, callback: CallbackQuery):
 async def debug_callback(client: Client, callback: CallbackQuery):
     print(f"Received callback data: {callback.data}")
 
-print(f"Loaded modules: {MODULES} Support Channel @Share_SourcCode")
+print(f"Loaded modules: {MODULES} Support Channel @NakamaMarket")
