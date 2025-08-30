@@ -13,17 +13,17 @@ async def _(client, message):
 """
 whitelist.py
 """
-@BOT.COMMAND("approve")
+@BOT.COMMAND("wl")
 @BOT.ADMIN
 async def _(client, message):
     await add_whitelist_func(client, message)
 
-@BOT.COMMAND("unapprove")
+@BOT.COMMAND("delwl")
 @BOT.ADMIN
 async def _(client, message):
     await remove_whitelist_func(client, message)
 
-@BOT.COMMAND("listapprove")
+@BOT.COMMAND("listwl")
 @BOT.ADMIN
 async def _(client, message):
     await list_whitelist_func(client, message)
