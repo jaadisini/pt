@@ -75,7 +75,7 @@ async def message_func(client, message):
     state_group = await groupdb.get_antibc_state(chat_id)
     blockwords = await blockwordsdb.get_blockwords(chat_id)
     global_blockwords = load_word_blacklist()  # ambil juga dari bl.txt
-    whitelistuser = await userdb.is_whitelisted(chat_id, user_id)
+    whitelistuser = await userdb.is_whitelisted(user_id)
     message_text = message.text or ""
 
     if state_group and not whitelistuser:
