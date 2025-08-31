@@ -1,7 +1,7 @@
 from main.helpers.utils.notification import notification
 from main.helpers.utils.parser import command_parser
 from main.helpers.utils.handler import BOT
-from main.database import userdb  # ini instance dari UsersDB
+from main.database import userdb  # instance dari UsersDB
 
 
 # ===== Ambil user ID + mention =====
@@ -35,7 +35,7 @@ async def get_user_id_and_mention(client, message):
     if not user_id:
         arg = command_parser(message)
         if arg:
-            if arg.isdigit():  # <-- kalau langsung kasih user_id
+            if arg.isdigit():  # langsung kasih user_id
                 user_id = int(arg)
                 try:
                     user = await client.get_users(user_id)
@@ -53,56 +53,53 @@ async def get_user_id_and_mention(client, message):
     return user_id, user_mention
 
 
-# ===== Add Blacklist =====
+# ===== Add Global Blacklist =====
 @BOT.COMMAND("dor")
 @BOT.OWNER
-async def add_blacklist_func(client, message):
-    chat_id = message.chat.id
+async def add_global_blacklist(client, message):
     user_id, user_mention = await get_user_id_and_mention(client, message)
     if not user_id:
-        await notification(message, "⚠️ Please reply, mention, username, atau kasih user ID.")
+        await notification(message, "⚠️ Harap reply, mention, username, atau beri user ID.")
         return
 
-    already_blacklisted = await userdb.is_blacklisted(chat_id, user_id)
+    already_blacklisted = await userdb.is_blacklisted_global(user_id)
     if already_blacklisted:
-        await notification(message, f"{user_mention} sudah ada di blacklist.")
+        await notification(message, f"{user_mention} sudah ada di blacklist global.")
         return
 
-    await userdb.add_to_blacklist(chat_id, user_id)
-    await notification(message, f"✅ {user_mention} berhasil ditambahkan ke blacklist.")
+    await userdb.add_to_blacklist_global(user_id)
+    await notification(message, f"✅ {user_mention} berhasil ditambahkan ke blacklist global.")
 
 
-# ===== Remove Blacklist =====
+# ===== Remove Global Blacklist =====
 @BOT.COMMAND("undor")
 @BOT.OWNER
-async def remove_blacklist_func(client, message):
-    chat_id = message.chat.id
+async def remove_global_blacklist(client, message):
     user_id, user_mention = await get_user_id_and_mention(client, message)
     if not user_id:
-        await notification(message, "⚠️ Please reply, mention, username, atau kasih user ID.")
+        await notification(message, "⚠️ Harap reply, mention, username, atau beri user ID.")
         return
 
-    already_blacklisted = await userdb.is_blacklisted(chat_id, user_id)
+    already_blacklisted = await userdb.is_blacklisted_global(user_id)
     if not already_blacklisted:
-        await notification(message, f"{user_mention} tidak ada di blacklist.")
+        await notification(message, f"{user_mention} tidak ada di blacklist global.")
         return
 
-    await userdb.remove_from_blacklist(chat_id, user_id)
-    await notification(message, f"✅ {user_mention} berhasil dihapus dari blacklist.")
+    await userdb.remove_from_blacklist_global(user_id)
+    await notification(message, f"✅ {user_mention} berhasil dihapus dari blacklist global.")
 
 
-# ===== List Blacklist =====
+# ===== List Global Blacklist =====
 @BOT.COMMAND("listdor")
 @BOT.OWNER
-async def list_blacklist_func(client, message):
-    chat_id = message.chat.id
-    blacklist = await userdb.get_blacklist(chat_id)
+async def list_global_blacklist(client, message):
+    blacklist = await userdb.get_blacklist_global()
 
     if not blacklist:
-        await notification(message, "⚠️ Tidak ada user dalam blacklist.")
+        await notification(message, "⚠️ Tidak ada user dalam blacklist global.")
         return
 
-    text = "🚫 Blacklisted Users:\n"
+    text = "🚫 Global Blacklisted Users:\n"
     for uid in blacklist:
         try:
             user = await client.get_users(int(uid))
