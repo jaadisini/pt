@@ -2,6 +2,7 @@ import json
 import os
 from main.helpers.utils.notification import notification
 from main.helpers.utils.parser import command_parser
+from main.helpers.utils.handler import BOT
 from main.database import userdb, groupdb
 
 
