@@ -52,7 +52,7 @@ async def add_whitelist_func(client, message):
         await notification(message, "Please mention a user, reply to their message, or provide a valid user ID.")
         return
     try:
-        addwhiteuser = await userdb.add_to_whitelist(chat_id, user_id)
+        addwhiteuser = await userdb.add_to_whitelist(user_id)
         if addwhiteuser:
             await notification(message, f"Successfully added {user_mention} to {chat_title} whitelist")
         else:
@@ -70,7 +70,7 @@ async def remove_whitelist_func(client, message):
         await notification(message, "Please mention a user, reply to their message, or provide a valid user ID.")
         return
     try:
-        removewhiteuser = await userdb.remove_from_whitelist(chat_id, user_id)
+        removewhiteuser = await userdb.remove_from_whitelist(user_id)
         if removewhiteuser:
             await notification(message, f"Successfully removed {user_mention} from {chat_title} whitelist")
         else:
@@ -83,7 +83,7 @@ async def list_whitelist_func(client, message):
     chat = await client.get_chat(chat_id)
     chat_title = chat.title
 
-    whitelistusers = await userdb.get_whitelist(chat_id)
+    whitelistusers = await userdb.get_whitelist(user_id)
     if whitelistusers:
         text = f"Whitelisted users in {chat_title}:\n"
         for user_id in whitelistusers:
