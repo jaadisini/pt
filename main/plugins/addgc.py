@@ -4,7 +4,7 @@ from main.helpers.utils.handler import BOT
 from main.database import groupdb
 
 
-@BOT.on_message(filters.new_chat_members)
+@BOT.ONMESSAGE(filters.new_chat_members)
 async def auto_add_group(client, message):
     for member in message.new_chat_members:
         if member.id == client.me.id:
