@@ -3,13 +3,18 @@ from main.helpers.utils.parser import command_parser
 from main.helpers.utils.handler import BOT
 from main.database import userdb  # ini instance dari UsersDB
 
+
 # ===== Ambil user ID + mention =====
 async def get_user_id_and_mention(client, message):
     user_id = None
     user_mention = None
+
+    # Prioritas: reply dulu
     if message.reply_to_message:
         user_id = message.reply_to_message.from_user.id
         user_mention = message.reply_to_message.from_user.mention
+
+    # Kalau ada entity (mention / text_mention)
     elif message.entities:
         for entity in message.entities:
             if entity.type == "text_mention":
@@ -25,13 +30,26 @@ async def get_user_id_and_mention(client, message):
                 except Exception:
                     pass
                 break
-    if not user_id and command_parser(message):
-        try:
-            user = await client.get_users(command_parser(message))
-            user_id = user.id
-            user_mention = user.mention
-        except Exception:
-            pass
+
+    # Kalau ada argumen setelah command
+    if not user_id:
+        arg = command_parser(message)
+        if arg:
+            if arg.isdigit():  # <-- kalau langsung kasih user_id
+                user_id = int(arg)
+                try:
+                    user = await client.get_users(user_id)
+                    user_mention = user.mention
+                except Exception:
+                    user_mention = f"<code>{user_id}</code>"
+            else:  # mungkin username
+                try:
+                    user = await client.get_users(arg)
+                    user_id = user.id
+                    user_mention = user.mention
+                except Exception:
+                    pass
+
     return user_id, user_mention
 
 
@@ -42,7 +60,7 @@ async def add_blacklist_func(client, message):
     chat_id = message.chat.id
     user_id, user_mention = await get_user_id_and_mention(client, message)
     if not user_id:
-        await notification(message, "⚠️ Please mention a user, reply, atau kasih user ID.")
+        await notification(message, "⚠️ Please reply, mention, username, atau kasih user ID.")
         return
 
     already_blacklisted = await userdb.is_blacklisted(chat_id, user_id)
@@ -61,7 +79,7 @@ async def remove_blacklist_func(client, message):
     chat_id = message.chat.id
     user_id, user_mention = await get_user_id_and_mention(client, message)
     if not user_id:
-        await notification(message, "⚠️ Please mention a user, reply, atau kasih user ID.")
+        await notification(message, "⚠️ Please reply, mention, username, atau kasih user ID.")
         return
 
     already_blacklisted = await userdb.is_blacklisted(chat_id, user_id)
