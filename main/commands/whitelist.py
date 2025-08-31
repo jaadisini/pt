@@ -2,8 +2,8 @@ from main.helpers.utils.notification import notification
 from main.helpers.utils.parser import command_parser
 from main.database import userdb, groupdb
 
-__MODULE__ = "Approve"
-__DESCRIPTION__ = "<blockquote>#ApproveUser</blockquote>"
+__MODULE__ = "Whitelist"
+__DESCRIPTION__ = "<blockquote>#WhitelistUser</blockquote>"
 __COMMANDS__ = """
 ⦿ /wl [user_id / reply]: `Menambahkan user agar pesan tidak dihapus.`
 ⦿ /delwl [user_id / reply]: `Menghapus dari daftar whitelist.`
