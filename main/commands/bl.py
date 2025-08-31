@@ -4,89 +4,96 @@ from main.helpers.utils.handler import BOT
 from main.database import userdb  # instance dari UsersDB
 
 
-# ===== Ambil user ID + mention =====
-async def get_user_id_and_mention(client, message):
-    user_id = None
-    user_mention = None
+# ===== Ambil banyak user ID + mention =====
+async def get_users_from_message(client, message):
+    user_ids = []
+    user_mentions = []
 
-    # Prioritas: reply dulu
+    # kalau reply
     if message.reply_to_message:
         user_id = message.reply_to_message.from_user.id
-        user_mention = message.reply_to_message.from_user.mention
+        user_ids.append(user_id)
+        user_mentions.append(message.reply_to_message.from_user.mention)
 
-    # Kalau ada entity (mention / text_mention)
-    elif message.entities:
-        for entity in message.entities:
-            if entity.type == "text_mention":
-                user_id = entity.user.id
-                user_mention = entity.user.mention
-                break
-            elif entity.type == "mention":
-                username = message.text[entity.offset:entity.offset+entity.length]
-                try:
-                    user = await client.get_users(username)
-                    user_id = user.id
-                    user_mention = user.mention
-                except Exception:
-                    pass
-                break
+    # ambil argumen (bisa banyak dipisah spasi)
+    args = command_parser(message).split()
+    for arg in args:
+        uid = None
+        mention = None
+        if arg.isdigit():  # user id
+            uid = int(arg)
+            try:
+                user = await client.get_users(uid)
+                mention = user.mention
+            except Exception:
+                mention = f"<code>{uid}</code>"
+        else:  # username
+            try:
+                user = await client.get_users(arg)
+                uid = user.id
+                mention = user.mention
+            except Exception:
+                continue
 
-    # Kalau ada argumen setelah command
-    if not user_id:
-        arg = command_parser(message)
-        if arg:
-            if arg.isdigit():  # langsung kasih user_id
-                user_id = int(arg)
-                try:
-                    user = await client.get_users(user_id)
-                    user_mention = user.mention
-                except Exception:
-                    user_mention = f"<code>{user_id}</code>"
-            else:  # mungkin username
-                try:
-                    user = await client.get_users(arg)
-                    user_id = user.id
-                    user_mention = user.mention
-                except Exception:
-                    pass
+        if uid and uid not in user_ids:
+            user_ids.append(uid)
+            user_mentions.append(mention)
 
-    return user_id, user_mention
+    return user_ids, user_mentions
 
 
 # ===== Add Global Blacklist =====
 @BOT.COMMAND("dor")
 @BOT.OWNER
 async def add_global_blacklist(client, message):
-    user_id, user_mention = await get_user_id_and_mention(client, message)
-    if not user_id:
+    user_ids, user_mentions = await get_users_from_message(client, message)
+    if not user_ids:
         await notification(message, "⚠️ Harap reply, mention, username, atau beri user ID.")
         return
 
-    already_blacklisted = await userdb.is_blacklisted(user_id)
-    if already_blacklisted:
-        await notification(message, f"{user_mention} sudah ada di blacklist global.")
-        return
+    added, skipped = [], []
+    for uid, mention in zip(user_ids, user_mentions):
+        already_blacklisted = await userdb.is_blacklisted(uid)
+        if already_blacklisted:
+            skipped.append(mention)
+        else:
+            await userdb.add_to_blacklist(uid)
+            added.append(mention)
 
-    await userdb.add_to_blacklist(user_id)
-    await notification(message, f"✅ {user_mention} berhasil ditambahkan ke blacklist global.")
+    text = ""
+    if added:
+        text += "✅ Ditambahkan ke blacklist global:\n" + "\n".join(added) + "\n"
+    if skipped:
+        text += "⚠️ Sudah ada di blacklist global:\n" + "\n".join(skipped)
+
+    await notification(message, text)
 
 
 # ===== Remove Global Blacklist =====
 @BOT.COMMAND("undor")
 @BOT.OWNER
 async def remove_global_blacklist(client, message):
-    user_id, user_mention = await get_user_id_and_mention(client, message)
-    if not user_id:
+    user_ids, user_mentions = await get_users_from_message(client, message)
+    if not user_ids:
         await notification(message, "⚠️ Harap reply, mention, username, atau beri user ID.")
         return
 
-    already_blacklisted = await userdb.is_blacklisted(user_id)
-    if not already_blacklisted:
-        await notification(message, f"{user_mention} tidak ada di blacklist global.")
-        return
+    removed, not_found = [], []
+    for uid, mention in zip(user_ids, user_mentions):
+        already_blacklisted = await userdb.is_blacklisted(uid)
+        if not already_blacklisted:
+            not_found.append(mention)
+        else:
+            await userdb.remove_from_blacklist(uid)
+            removed.append(mention)
 
-    await userdb.remove_from_blacklist(user_id)
-    await notification(message, f"✅ {user_mention} berhasil dihapus dari blacklist global.")
+    text = ""
+    if removed:
+        text += "✅ Dihapus dari blacklist global:\n" + "\n".join(removed) + "\n"
+    if not_found:
+        text += "⚠️ Tidak ada di blacklist global:\n" + "\n".join(not_found)
+
+    await notification(message, text)
 
 
 # ===== List Global Blacklist =====
