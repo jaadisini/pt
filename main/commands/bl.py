@@ -1,30 +1,7 @@
-import json
-import os
 from main.helpers.utils.notification import notification
 from main.helpers.utils.parser import command_parser
 from main.helpers.utils.handler import BOT
-from main.database import userdb, groupdb
-
-
-
-__ISPRO__ = False
-
-
-# ===== Utils Blacklist =====
-def load_blacklist():
-    if os.path.exists("bl.json"):
-        with open("bl.json", "r") as f:
-            try:
-                return json.load(f)
-            except json.JSONDecodeError:
-                return []
-    return []
-
-
-def save_blacklist(data):
-    with open("bl.json", "w") as f:
-        json.dump(data, f, indent=2)
-
+from main.database import userdb  # ini instance dari UsersDB
 
 # ===== Ambil user ID + mention =====
 async def get_user_id_and_mention(client, message):
@@ -62,18 +39,18 @@ async def get_user_id_and_mention(client, message):
 @BOT.COMMAND("dor")
 @BOT.OWNER
 async def add_blacklist_func(client, message):
+    chat_id = message.chat.id
     user_id, user_mention = await get_user_id_and_mention(client, message)
     if not user_id:
-        await notification(message, "Please mention a user, reply to their message, or provide a valid user ID.")
+        await notification(message, "⚠️ Please mention a user, reply, atau kasih user ID.")
         return
 
-    blacklist = load_blacklist()
-    if str(user_id) in [str(uid) for uid in blacklist]:
+    already_blacklisted = await userdb.is_blacklisted(chat_id, user_id)
+    if already_blacklisted:
         await notification(message, f"{user_mention} sudah ada di blacklist.")
         return
 
-    blacklist.append(str(user_id))
-    save_blacklist(blacklist)
+    await userdb.add_to_blacklist(chat_id, user_id)
     await notification(message, f"✅ {user_mention} berhasil ditambahkan ke blacklist.")
 
 
@@ -81,18 +58,18 @@ async def add_blacklist_func(client, message):
 @BOT.COMMAND("undor")
 @BOT.OWNER
 async def remove_blacklist_func(client, message):
+    chat_id = message.chat.id
     user_id, user_mention = await get_user_id_and_mention(client, message)
     if not user_id:
-        await notification(message, "Please mention a user, reply to their message, or provide a valid user ID.")
+        await notification(message, "⚠️ Please mention a user, reply, atau kasih user ID.")
         return
 
-    blacklist = load_blacklist()
-    if str(user_id) not in [str(uid) for uid in blacklist]:
+    already_blacklisted = await userdb.is_blacklisted(chat_id, user_id)
+    if not already_blacklisted:
         await notification(message, f"{user_mention} tidak ada di blacklist.")
         return
 
-    blacklist = [uid for uid in blacklist if str(uid) != str(user_id)]
-    save_blacklist(blacklist)
+    await userdb.remove_from_blacklist(chat_id, user_id)
     await notification(message, f"✅ {user_mention} berhasil dihapus dari blacklist.")
 
 
@@ -100,7 +77,9 @@ async def remove_blacklist_func(client, message):
 @BOT.COMMAND("listdor")
 @BOT.OWNER
 async def list_blacklist_func(client, message):
-    blacklist = load_blacklist()
+    chat_id = message.chat.id
+    blacklist = await userdb.get_blacklist(chat_id)
+
     if not blacklist:
         await notification(message, "⚠️ Tidak ada user dalam blacklist.")
         return
