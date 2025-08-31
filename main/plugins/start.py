@@ -10,7 +10,7 @@ TEXT_START = """Hai, [{}](tg://user?id={})
 
 **Telah digunakan :** `{}` group
 
-<blockquote>I am an AntiGcast bot whose job is to automatically delete Gcast in your group.</blockquote>
+<blockquote>AntiGcast bot otomatis menghapus Gcast di grup kamu.</blockquote>
 """
 
 async def send_msg_to_owner(client, message):
@@ -55,6 +55,7 @@ async def start_command(client, message):
             [
                 InlineKeyboardButton("Commands", callback_data="CB_HELP"),
                 InlineKeyboardButton("Owner", url=f"https://t.me/{COWNER.OWNER_USERNAME}"),
+                InlineKeyboardButton("Store", url=f"https://t.me/NakamaMarket"),
             ],
             [InlineKeyboardButton("Close", callback_data="CB_CLOSE")],
         ]
