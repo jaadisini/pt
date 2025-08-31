@@ -62,12 +62,12 @@ async def add_global_blacklist(client, message):
         await notification(message, "⚠️ Harap reply, mention, username, atau beri user ID.")
         return
 
-    already_blacklisted = await userdb.is_blacklisted_global(user_id)
+    already_blacklisted = await userdb.is_blacklisted(user_id)
     if already_blacklisted:
         await notification(message, f"{user_mention} sudah ada di blacklist global.")
         return
 
-    await userdb.add_to_blacklist_global(user_id)
+    await userdb.add_to_blacklist(user_id)
     await notification(message, f"✅ {user_mention} berhasil ditambahkan ke blacklist global.")
 
 
@@ -80,12 +80,12 @@ async def remove_global_blacklist(client, message):
         await notification(message, "⚠️ Harap reply, mention, username, atau beri user ID.")
         return
 
-    already_blacklisted = await userdb.is_blacklisted_global(user_id)
+    already_blacklisted = await userdb.is_blacklisted(user_id)
     if not already_blacklisted:
         await notification(message, f"{user_mention} tidak ada di blacklist global.")
         return
 
-    await userdb.remove_from_blacklist_global(user_id)
+    await userdb.remove_from_blacklist(user_id)
     await notification(message, f"✅ {user_mention} berhasil dihapus dari blacklist global.")
 
 
@@ -93,7 +93,7 @@ async def remove_global_blacklist(client, message):
 @BOT.COMMAND("listdor")
 @BOT.OWNER
 async def list_global_blacklist(client, message):
-    blacklist = await userdb.get_blacklist_global()
+    blacklist = await userdb.get_blacklist()
 
     if not blacklist:
         await notification(message, "⚠️ Tidak ada user dalam blacklist global.")
