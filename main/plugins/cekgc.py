@@ -2,7 +2,7 @@
 from pyrogram import filters
 from main.helpers.utils.handler import BOT
 from main.database import groupdb
-from config import LOG_GROUP_ID
+from config import CBOT
 
 
 @BOT.COMMAND("cekgrup")
@@ -17,7 +17,7 @@ async def cek_grup(client, message):
             text += f"{idx}. <code>{chat_id}</code>\n"
 
         if len(text) > 4000:
-            await client.send_message(LOG_GROUP_ID, text)
+            await client.send_message(CBOT.LOG_GROUP_ID, text)
             await message.reply_text("📤 Daftar grup terlalu panjang, sudah dikirim ke log grup.")
         else:
             await message.reply_text(text)
