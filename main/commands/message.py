@@ -7,7 +7,8 @@ from main.helpers.utils.similiarity import AdvancedSimilarityChecker
 
 similarity_checker = AdvancedSimilarityChecker(threshold=0.7)
 
-# Load daftar blacklist dari bl.json (global)
+
+# Load daftar blacklist dari bl.json (GLOBAL)
 def load_blacklist():
     if os.path.exists("bl.json"):
         with open("bl.json", "r") as f:
@@ -19,23 +20,30 @@ def load_blacklist():
 
 
 async def message_func(client, message):
-    chat_id = message.chat.id
-    user_id = message.from_user.id if message.from_user else None
-    if not user_id:
+    if not message.from_user:
         return
+
+    chat_id = message.chat.id
+    user_id = message.from_user.id
 
     # ==== Cek Global Blacklist (bl.json) ====
     blacklist = load_blacklist()
     if str(user_id) in [str(uid) for uid in blacklist]:
         await message.delete()
-        
-
-    # ==== Cek Blacklist Per Grup (userdb) ====
-    if await userdb.is_blacklisted(chat_id, user_id):
-        await message.delete()
+        await userdb.remove_user(user_id)  # opsional: hapus dari db user
         return
 
-    # ==== Fitur Anti Broadcast / Blockwords ====
+    # ==== Cek Blacklist dari database (GLOBAL, bukan per grup) ====
+    if await userdb.is_blacklisted_global(user_id):  # fungsi global cek
+        mention = f"[{message.from_user.first_name}](tg://user?id={user_id})"
+        await message.delete()
+        await notification(
+            message,
+            f"{mention}, Pesan anda telah dihapus karena terdeteksi sebagai broadcast."
+        )
+        return
+
+    # ==== Anti Broadcast / Blockwords (per grup) ====
     state_group = await groupdb.get_antibc_state(chat_id)
     blockwords = await blockwordsdb.get_blockwords(chat_id)
     whitelistuser = await userdb.is_whitelisted(chat_id, user_id)
@@ -44,11 +52,7 @@ async def message_func(client, message):
     if state_group and not whitelistuser:
         # cek gibberish
         if gibberish(message):
-            mention = (
-                f"[{message.from_user.first_name} {message.from_user.last_name or ''}](tg://user?id={message.from_user.id})"
-                if message.from_user
-                else "."
-            )
+            mention = f"[{message.from_user.first_name}](tg://user?id={user_id})"
             await message.delete()
             await notification(
                 message,
@@ -62,14 +66,10 @@ async def message_func(client, message):
             for blocked_word in blockwords
             for word in [message_text] + message_text.split()
         ):
-            mention = (
-                f"[{message.from_user.first_name} {message.from_user.last_name or ''}](tg://user?id={message.from_user.id})"
-                if message.from_user
-                else "."
-            )
+            mention = f"[{message.from_user.first_name}](tg://user?id={user_id})"
             await message.delete()
             await notification(
                 message,
-                f"{mention}, Pesan anda telah dihapus karena mengandung kata terlarang."
+                f"{mention}, Pesan anda telah dihapus karena terdeteksi sebagai broadcast."
             )
             return
