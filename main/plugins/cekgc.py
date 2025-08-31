@@ -5,7 +5,7 @@ from main.database import groupdb
 from config import CBOT
 
 
-@BOT.ONCMD("cekgrup")
+@BOT.COMMAND("cekgrup")
 async def cek_grup(client, message):
     try:
         groups = await groupdb.get_all_groups()  # pastikan groupdb punya fungsi ini
