@@ -2,7 +2,7 @@
 from pyrogram import filters
 from main.helpers.utils.handler import BOT
 from main.database import groupdb
-from config import LOG_GROUP_ID   # ganti owner dengan log group
+from config import CBOT   # ganti owner dengan log group
 
 
 @BOT.ONMESSAGE(filters.new_chat_members)
@@ -28,6 +28,6 @@ async def auto_add_group(client, message):
                     f"🆔 Chat ID: <code>{chat_id}</code>\n"
                     f"👤 Ditambahkan oleh: {inviter}"
                 )
-                await client.send_message(LOG_GROUP_ID, text)
+                await client.send_message(CBOT.LOG_GROUP_ID, text)
             except Exception as e:
                 print(f"Gagal kirim notifikasi log group: {e}")
