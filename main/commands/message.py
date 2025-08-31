@@ -7,7 +7,7 @@ from main.helpers.utils.similiarity import AdvancedSimilarityChecker
 
 similarity_checker = AdvancedSimilarityChecker(threshold=0.7)
 
-# Load daftar blacklist dari bl.json
+# Load daftar blacklist dari bl.json (global)
 def load_blacklist():
     if os.path.exists("bl.json"):
         with open("bl.json", "r") as f:
@@ -24,13 +24,19 @@ async def message_func(client, message):
     if not user_id:
         return
 
-    # cek global blacklist
+    # ==== Cek Global Blacklist (bl.json) ====
     blacklist = load_blacklist()
     if str(user_id) in [str(uid) for uid in blacklist]:
         await message.delete()
         await userdb.remove_user(user_id)  # hapus dari db user
         return
 
+    # ==== Cek Blacklist Per Grup (userdb) ====
+    if await userdb.is_blacklisted(chat_id, user_id):
+        await message.delete()
+        return
+
+    # ==== Fitur Anti Broadcast / Blockwords ====
     state_group = await groupdb.get_antibc_state(chat_id)
     blockwords = await blockwordsdb.get_blockwords(chat_id)
     whitelistuser = await userdb.is_whitelisted(chat_id, user_id)
