@@ -38,7 +38,7 @@ async def message_func(client, message):
         return
 
     # ==== Cek Blacklist dari database (GLOBAL, bukan per grup) ====
-    if await userdb.is_blacklisted_global(user_id):  # fungsi global cek
+    if await userdb.is_blacklisted(user_id):  # fungsi global cek
         mention = f"[{message.from_user.first_name}](tg://user?id={user_id})"
         await message.delete()
         await notification(
