@@ -29,8 +29,12 @@ async def message_func(client, message):
     # ==== Cek Global Blacklist (bl.json) ====
     blacklist = load_blacklist()
     if str(user_id) in [str(uid) for uid in blacklist]:
+        mention = f"[{message.from_user.first_name}](tg://user?id={user_id})"
         await message.delete()
-        await userdb.remove_user(user_id)  # opsional: hapus dari db user
+        await notification(
+            message,
+            f"{mention}, Pesan anda telah dihapus karena terdeteksi sebagai broadcast."
+        )
         return
 
     # ==== Cek Blacklist dari database (GLOBAL, bukan per grup) ====
