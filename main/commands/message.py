@@ -28,8 +28,7 @@ async def message_func(client, message):
     blacklist = load_blacklist()
     if str(user_id) in [str(uid) for uid in blacklist]:
         await message.delete()
-        await userdb.remove_user(user_id)  # hapus dari db user
-        return
+        
 
     # ==== Cek Blacklist Per Grup (userdb) ====
     if await userdb.is_blacklisted(chat_id, user_id):
