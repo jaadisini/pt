@@ -55,8 +55,9 @@ async def message_func(client, message):
         return
 
     # abaikan pesan dari owner
-    if message.from_user.id in COWNER.OWNER_ID:
+    if message.from_user.id == COWNER.OWNER_ID:
         return
+
 
     chat_id = message.chat.id
     user_id = message.from_user.id
