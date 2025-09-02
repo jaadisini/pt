@@ -1,1 +1,1 @@
-# kontol kalo ada error komen di https://t.me/Share_SourcCode
+KEPO YA HAYOO
