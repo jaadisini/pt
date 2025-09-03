@@ -60,12 +60,11 @@ async def _(client, callback_query: CallbackQuery):
     data = callback_query.data.split("_")[1]
     chat_id = callback_query.message.chat.id
     user_id = callback_query.from_user.id
-    message = callback_query.message.reply_to_message or callback_query.message
 
-    # cek apakah user adalah admin/owner
+    # hanya admin/owner yang diproses, user biasa diabaikan
     member = await client.get_chat_member(chat_id, user_id)
-    if not (member.status in ["administrator", "creator"]):
-        return await callback_query.answer("🚫 Hanya admin/owner yang bisa memulai tagall.", show_alert=True)
+    if member.status not in ["administrator", "creator"]:
+        return
 
     if data == "cancel":
         return await callback_query.message.edit_text("❌ Tagall dibatalkan sebelum dimulai.")
@@ -73,13 +72,18 @@ async def _(client, callback_query: CallbackQuery):
     try:
         menit = int(data)
     except Exception:
-        return await callback_query.answer("Durasi tidak valid.", show_alert=True)
+        return
 
     if chat_id in tagallgcid:
-        return await callback_query.answer("Proses tag sudah berjalan.", show_alert=True)
+        return
 
     tagallgcid.append(chat_id)
+
+    # hapus tombol setelah dipilih
     await callback_query.message.edit_text(f"✅ Tagall dimulai. Akan otomatis berhenti dalam {menit} menit.")
+
+    # ambil pesan /all yang asli
+    message = callback_query.message.reply_to_message or callback_query.message
 
     asyncio.create_task(stop_tagall_timer(chat_id, menit, callback_query.message))
     await mulai_tagall(client, message, chat_id)
