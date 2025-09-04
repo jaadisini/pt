@@ -31,6 +31,7 @@ def get_readable_time(seconds: int) -> str:
 
 
 @BOT.COMMAND("ping")
+@BOT.ADMIN
 async def _(client, message):
     start = time.time()
     m = await message.reply_text("🏓 Pong...")
