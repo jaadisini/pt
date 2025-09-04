@@ -44,7 +44,7 @@ async def get_users_from_message(client, message):
 
 # ===== Add Global Blacklist =====
 @BOT.COMMAND("dor")
-@BOT.ADMIN
+@BOT.OWNER
 async def add_global_blacklist(client, message):
     user_ids, user_mentions = await get_users_from_message(client, message)
     if not user_ids:
@@ -71,7 +71,7 @@ async def add_global_blacklist(client, message):
 
 # ===== Remove Global Blacklist =====
 @BOT.COMMAND("undor")
-@BOT.ADMIN
+@BOT.OWNER
 async def remove_global_blacklist(client, message):
     user_ids, user_mentions = await get_users_from_message(client, message)
     if not user_ids:
@@ -98,7 +98,7 @@ async def remove_global_blacklist(client, message):
 
 # ===== List Global Blacklist =====
 @BOT.COMMAND("listdor")
-@BOT.ADMIN
+@BOT.OWNER
 async def list_global_blacklist(client, message):
     blacklist = await userdb.get_blacklist()
 
