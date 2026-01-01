@@ -12,6 +12,6 @@ class COWNER:
     OWNER_USERNAME = "Nakamahire"
     OWNER_ID = 6305402536
 class CDATABASE:
-    DATABASE_URL = "mongodb+srv://ndydopaypal:ndydopaypal@cluster0.fpjt2cu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    DATABASE_URL = "mongodb+srv://karangasem:1234@cluster0.34crnft.mongodb.net/?appName=Cluster0"
 
 DEV = "6305402536"
