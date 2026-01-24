@@ -1,5 +1,5 @@
 pyrofork
-Navygram
+pyrogram
 tgcrypto
 tornado
 pykeyboard
