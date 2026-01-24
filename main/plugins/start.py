@@ -55,7 +55,6 @@ async def start_command(client, message):
             [
                 InlineKeyboardButton("Commands", callback_data="CB_HELP"),
                 InlineKeyboardButton("Owner", url=f"https://t.me/{COWNER.OWNER_USERNAME}"),
-                InlineKeyboardButton("Store", url=f"https://t.me/NakamaMarket"),
             ],
             [InlineKeyboardButton("Close", callback_data="CB_CLOSE")],
         ]
