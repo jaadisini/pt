@@ -24,8 +24,7 @@ async def _(client: Client, callback: CallbackQuery):
     keyboard.row(InlineButton("✚ Ads To Your Group", url=f"https://t.me/{bot.me.username}?startgroup=true"))
     keyboard.row(
         InlineButton("Commands", "CB_HELP"),
-        InlineButton("Owner", url=f"https://t.me/{COWNER.OWNER_USERNAME}"),
-        InlineButton("Store", url=f"https://t.me/NakamaMarket"),
+        InlineButton("Channel", url=f"https://t.me/Dzdisni"),
     )
     keyboard.row(InlineButton("Close", "CB_CLOSE"))
     return await callback.edit_message_text(text, reply_markup=keyboard)
