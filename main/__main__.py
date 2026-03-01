@@ -45,7 +45,7 @@ async def load_plugins():
 
     await asyncio.gather(*load_tasks)
 
-    await bot.send_message(CBOT.LOG_GROUP_ID, f"[🤖 @{bot.me.username} 🤖] [🔥 TELAH BERHASIL DIAKTIFKAN! 🔥] [ Subscribe Channel t.me/Share_SourcCode ]")
+    await bot.send_message(CBOT.LOG_GROUP_ID, f"[🤖 @{bot.me.username} 🤖] [🔥 TELAH BERHASIL DIAKTIFKAN! 🔥] [ Subscribe Channel t.me/NakamaHire ]")
     LOGGER("main").info(f"[🤖 @{bot.me.username} 🤖] [🔥 TELAH BERHASIL DIAKTIFKAN! 🔥] [SUBSCRIBE CHANNEL @NakamaHire]")
 
 async def start_bot():
