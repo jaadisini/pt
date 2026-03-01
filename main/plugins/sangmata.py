@@ -11,12 +11,12 @@ from pyrogram.errors import UserNotParticipant
 
 from main.helpers.admin_check import admin_filter
 from AmonMusic.utils.matadb import *
-from main import Bot
+from main import bot
 
 
 
 
-@Bot.on_message(
+@bot.on_message(
     filters.group & ~filters.bot & ~filters.via_bot,
     group=3,
 )
@@ -45,7 +45,7 @@ async def cek_mataa(self: Client, ctx: Message):
     if msg != "":
         await ctx.reply_text(msg, quote=True)
 
-@app.on_message(filters.group & filters.command("sangmata") & admin_filter)
+@bot.on_message(filters.group & filters.command("sangmata") & admin_filter)
 #@app.on_message(filters.group & filters.command("sangmata") & ~filters.bot & ~filters.via_bot)
 async def set_mataa(self: Client, ctx: Message):
     if len(ctx.command) == 1:
