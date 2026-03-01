@@ -15,7 +15,7 @@ from main.helpers.utils.handler import BOT
 
 
 
-@BOT.ON.MESSAGE(
+@BOT.ONMESSAGE(
     filters.group & ~filters.bot & ~filters.via_bot,
     group=3,
 )
