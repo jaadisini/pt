@@ -10,9 +10,8 @@ from pyrogram.types import ChatPermissions
 from pyrogram.errors import UserNotParticipant
 
 from main.helpers.admin_check import admin_filter
-from AmonMusic.utils.matadb import *
-from main import bot
-
+from main.database.matadb import *
+from main.helpers.utils.handler import BOT
 
 
 
