@@ -1,9 +1,9 @@
 from typing import Dict, List, Union
-from config import MONGO_DB_URI
+from config import DATABASE_URL
 from motor.motor_asyncio import AsyncIOMotorClient as MongoCli
 
 
-mongo = MongoCli(MONGO_DB_URI).Rankings
+mongo = MongoCli(DATABASE_URL).Rankings
 
 matadb = mongo.sangmata
  
