@@ -43,7 +43,7 @@ async def tagall_command(client, message):
                     await message.reply_text(
                         f"<blockquote>{text}</blockquote>\n"
                         f"<blockquote><b>{anu}</b></blockquote>\n"
-                        f"<b><blockquote>🛒 @NakamaMarket</blockquote></b>",
+                        f"<b><blockquote>@NakamaHire</blockquote></b>",
                         quote=False,
                     )
                 except FloodWait as e:
@@ -52,7 +52,7 @@ async def tagall_command(client, message):
                     await message.reply_text(
                         f"<blockquote>{text}</blockquote>\n"
                         f"<blockquote><b>{anu}</b></blockquote>\n"
-                        f"<b><blockquote>🛒 @NakamaMarket</blockquote></b>",
+                        f"<b><blockquote>@NakamaHire</blockquote></b>",
                         quote=False,
                     )
                 users = []
@@ -66,7 +66,7 @@ async def tagall_command(client, message):
             await message.reply_text(
                 f"<blockquote>{text}</blockquote>\n"
                 f"<blockquote><b>{anu}</b></blockquote>\n"
-                f"<b><blockquote>🛒 @NakamaMarket</blockquote></b>",
+                f"<b><blockquote>@NakamaHire</blockquote></b>",
                 quote=False,
             )
         except FloodWait as e:
@@ -75,7 +75,7 @@ async def tagall_command(client, message):
             await message.reply_text(
                 f"<blockquote>{text}</blockquote>\n"
                 f"<blockquote><b>{anu}</b></blockquote>\n"
-                f"<b><blockquote>🛒 @NakamaMarket</blockquote></b>",
+                f"<b><blockquote>@NakamaHire</blockquote></b>",
                 quote=False,
             )
 
