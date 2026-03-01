@@ -24,13 +24,13 @@ async def _(client: Client, callback: CallbackQuery):
     keyboard.row(InlineButton("✚ Ads To Your Group", url=f"https://t.me/{bot.me.username}?startgroup=true"))
     keyboard.row(
         InlineButton("Commands", "CB_HELP"),
-        InlineButton("Channel", url=f"https://t.me/Dzdisni"),
+        InlineButton("Channel", url=f"https://t.me/NakamaHire"),
     )
     keyboard.row(InlineButton("Close", "CB_CLOSE"))
     return await callback.edit_message_text(text, reply_markup=keyboard)
 
 CREATOR = [
-    6305402536
+    1816904396
 ]
 SUPPORT = []
 
@@ -57,7 +57,7 @@ async def _(client: Client, callback_query: CallbackQuery):
         else:
             SUPPORT.remove(get.id)
             await pesan.delete()
-            return await client.send_message(1623499141, "Pembatalan Otomatis")
+            return await client.send_message(1816904396, "Pembatalan Otomatis")
     text = f"<b>✅ PESAN BALASAN ANDA TELAH TERKIRIM: {full_name}</b>"
     if user_ids not in [CREATOR]:
         buttons = [[InlineKeyboardButton("💬 Jawab Pesan 💬", f"jawab_pesan {user_id}")]]
