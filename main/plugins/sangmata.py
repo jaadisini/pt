@@ -15,7 +15,7 @@ from main.helpers.utils.handler import BOT
 
 
 
-@bot.on_message(
+@BOT.ON.MESSAGE(
     filters.group & ~filters.bot & ~filters.via_bot,
     group=3,
 )
@@ -44,8 +44,8 @@ async def cek_mataa(self: Client, ctx: Message):
     if msg != "":
         await ctx.reply_text(msg, quote=True)
 
-@bot.on_message(filters.group & filters.command("sangmata") & admin_filter)
-#@app.on_message(filters.group & filters.command("sangmata") & ~filters.bot & ~filters.via_bot)
+@BOT.COMMAND("sangmata", filters.group)
+@BOT.ADMIN
 async def set_mataa(self: Client, ctx: Message):
     if len(ctx.command) == 1:
         return await ctx.reply_text("Gunakan <code>/on</code>, untuk mengaktifkan sangmata. Jika Anda ingin menonaktifkan, Anda dapat menggunakan parameter off.")
