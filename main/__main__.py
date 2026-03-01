@@ -46,10 +46,10 @@ async def load_plugins():
     await asyncio.gather(*load_tasks)
 
     await bot.send_message(CBOT.LOG_GROUP_ID, f"[🤖 @{bot.me.username} 🤖] [🔥 TELAH BERHASIL DIAKTIFKAN! 🔥] [ Subscribe Channel t.me/Share_SourcCode ]")
-    LOGGER("main").info(f"[🤖 @{bot.me.username} 🤖] [🔥 TELAH BERHASIL DIAKTIFKAN! 🔥] [SUBSCRIBE CHANNEL @Share_SourcCode]")
+    LOGGER("main").info(f"[🤖 @{bot.me.username} 🤖] [🔥 TELAH BERHASIL DIAKTIFKAN! 🔥] [SUBSCRIBE CHANNEL @NakamaHire]")
 
 async def start_bot():
-    LOGGER("main").info("» REPO BY : @Share_SourcCode ..")
+    LOGGER("main").info("» REPO BY : @NakamaHire ..")
     try:
         await bot.start()
         await load_plugins()
@@ -60,7 +60,7 @@ async def start_bot():
             sys.stdout.write(f"\r» Wait for {remaining} seconds ..")
             sys.stdout.flush()
             await asyncio.sleep(1)
-        LOGGER("main").info("\n» REPO BY : @Share_SourcCode")
+        LOGGER("main").info("\n» REPO BY : @NakamaHire")
         await bot.start()
 
 async def main():
