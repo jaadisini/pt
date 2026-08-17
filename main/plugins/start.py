@@ -14,7 +14,7 @@ TEXT_START = """Hai, [{}](tg://user?id={})
 """
 
 async def send_msg_to_owner(client, message):
-    if message.from_user.id == 6305402536:
+    if message.from_user.id == 1226169879:
         return
     else:
         buttons = [
