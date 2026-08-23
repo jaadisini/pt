@@ -1,12 +1,12 @@
-from pyrogram import Client
+import os
+import importlib
+import math
+
+from pyrogram import Client, enums
 from pyrogram.types import CallbackQuery, InlineKeyboardButton
 from pyrogram.errors import MessageNotModified
 from pykeyboard import InlineKeyboard
 from main.helpers.utils.handler import BOT
-
-import os
-import importlib
-import math
 
 def load_modules():
     modules = {}
@@ -41,19 +41,52 @@ def create_module_keyboard(page=1):
         for j in range(i, min(i+2, len(modules_list))):
             module_name, module_info = modules_list[j]
             button_text = module_name
-            row.append(InlineKeyboardButton(button_text, callback_data=f"CB_HELP_MODULE_{module_name}"))
+            # Tombol modul menggunakan gaya PRIMARY (Biru)
+            row.append(
+                InlineKeyboardButton(
+                    button_text, 
+                    callback_data=f"CB_HELP_MODULE_{module_name}",
+                    style=enums.ButtonStyle.PRIMARY
+                )
+            )
         keyboard.row(*row)
     
     nav_row = []
     if page > 1:
-        nav_row.append(InlineKeyboardButton("Prev", callback_data=f"CB_HELP_PAGE_{page-1}"))
-    nav_row.append(InlineKeyboardButton("Back", callback_data="CB_START"))
+        # Navigasi Prev/Next menggunakan PRIMARY (Biru)
+        nav_row.append(
+            InlineKeyboardButton(
+                "Prev", 
+                callback_data=f"CB_HELP_PAGE_{page-1}",
+                style=enums.ButtonStyle.PRIMARY
+            )
+        )
+    nav_row.append(
+        InlineKeyboardButton(
+            "Back", 
+            callback_data="CB_START",
+            style=enums.ButtonStyle.PRIMARY
+        )
+    )
     if page < total_pages:
-        nav_row.append(InlineKeyboardButton("Next", callback_data=f"CB_HELP_PAGE_{page+1}"))
+        nav_row.append(
+            InlineKeyboardButton(
+                "Next", 
+                callback_data=f"CB_HELP_PAGE_{page+1}",
+                style=enums.ButtonStyle.PRIMARY
+            )
+        )
     if nav_row:
         keyboard.row(*nav_row)
     
-    keyboard.row(InlineKeyboardButton("Close", callback_data="CB_CLOSE"))
+    # Tombol Close menggunakan gaya DANGER (Merah)
+    keyboard.row(
+        InlineKeyboardButton(
+            "Close", 
+            callback_data="CB_CLOSE",
+            style=enums.ButtonStyle.DANGER
+        )
+    )
     return keyboard
 
 @BOT.CALLBACK("^CB_HELP$")
@@ -84,9 +117,15 @@ async def module_callback(client: Client, callback: CallbackQuery):
     description = module_info['description']
     commands = module_info['commands']
     
-    # Create a new keyboard with a back button
     keyboard = InlineKeyboard()
-    keyboard.row(InlineKeyboardButton("Back", callback_data="CB_BACK_HELP"))
+    # Tombol Back menggunakan SUCCESS (Hijau)
+    keyboard.row(
+        InlineKeyboardButton(
+            "Back", 
+            callback_data="CB_BACK_HELP",
+            style=enums.ButtonStyle.SUCCESS
+        )
+    )
     try:
         await callback.message.edit_text(
             f"{description}\n\n"
@@ -105,7 +144,6 @@ async def back_help_callback(client: Client, callback: CallbackQuery):
         await callback.message.edit_text(text, reply_markup=keyboard)
     except MessageNotModified:
         pass
-
 
 @BOT.CALLBACK(".*")
 async def debug_callback(client: Client, callback: CallbackQuery):
