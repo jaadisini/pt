@@ -1,4 +1,4 @@
-from pyrogram import filters
+from pyrogram import filters, enums
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from main.helpers.utils.handler import BOT
@@ -20,10 +20,14 @@ async def send_msg_to_owner(client, message):
         buttons = [
             [
                 InlineKeyboardButton(
-                    "👤 ᴘʀᴏꜰɪʟ", callback_data=f"profil {message.from_user.id}"
+                    "👤 ᴘʀᴏꜰɪʟ", 
+                    callback_data=f"profil {message.from_user.id}",
+                    style=enums.ButtonStyle.PRIMARY
                 ),
                 InlineKeyboardButton(
-                    "ᴊᴀᴡᴀʙ 💬", callback_data=f"jawab_pesan {message.from_user.id}"
+                    "ᴊᴀᴡᴀʙ 💬", 
+                    callback_data=f"jawab_pesan {message.from_user.id}",
+                    style=enums.ButtonStyle.SUCCESS
                 ),
             ],
         ]
@@ -51,12 +55,32 @@ async def start_command(client, message):
 
     keyboard = InlineKeyboardMarkup(
         [
-            [InlineKeyboardButton("✚ Add To Your Group", url=f"https://t.me/{username}?startgroup=true")],
             [
-                InlineKeyboardButton("Commands", callback_data="CB_HELP"),
-                InlineKeyboardButton("Owner", url=f"https://t.me/{COWNER.OWNER_USERNAME}"),
+                InlineKeyboardButton(
+                    "✚ Add To Your Group", 
+                    url=f"https://t.me/{username}?startgroup=true",
+                    style=enums.ButtonStyle.PRIMARY
+                )
             ],
-            [InlineKeyboardButton("Close", callback_data="CB_CLOSE")],
+            [
+                InlineKeyboardButton(
+                    "Commands", 
+                    callback_data="CB_HELP",
+                    style=enums.ButtonStyle.PRIMARY
+                ),
+                InlineKeyboardButton(
+                    "Owner", 
+                    url=f"https://t.me/{COWNER.OWNER_USERNAME}",
+                    style=enums.ButtonStyle.PRIMARY
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    "Close", 
+                    callback_data="CB_CLOSE",
+                    style=enums.ButtonStyle.DANGER
+                )
+            ],
         ]
     )
 
