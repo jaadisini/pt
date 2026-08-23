@@ -1,5 +1,5 @@
 pyrofork
-pyrogram
+git+https://github.com/jaadisini/taigram.git
 tgcrypto
 tornado
 pykeyboard
