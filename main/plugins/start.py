@@ -1,4 +1,4 @@
-```python
+
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -86,4 +86,4 @@ async def start_command(client, message):
         caption=text,
         reply_markup=keyboard,
     )
-```
+
