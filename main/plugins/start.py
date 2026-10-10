@@ -1,4 +1,5 @@
-from pyrogram import filters, enums
+```python
+from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from main.helpers.utils.handler import BOT
@@ -13,6 +14,7 @@ TEXT_START = """Hai, [{}](tg://user?id={})
 <blockquote>AntiGcast bot otomatis menghapus Gcast di grup kamu.</blockquote>
 """
 
+
 async def send_msg_to_owner(client, message):
     if message.from_user.id == 1226169879:
         return
@@ -20,18 +22,18 @@ async def send_msg_to_owner(client, message):
         buttons = [
             [
                 InlineKeyboardButton(
-                    "👤 ᴘʀᴏꜰɪʟ", 
-                    callback_data=f"profil {message.from_user.id}",
-                    style=enums.ButtonStyle.PRIMARY
+                    "👤 ᴘʀᴏꜰɪʟ",
+                    callback_data=f"profil {message.from_user.id}"
                 ),
                 InlineKeyboardButton(
-                    "ᴊᴀᴡᴀʙ 💬", 
-                    callback_data=f"jawab_pesan {message.from_user.id}",
-                    style=enums.ButtonStyle.SUCCESS
+                    "ᴊᴀᴡᴀʙ 💬",
+                    callback_data=f"jawab_pesan {message.from_user.id}"
                 ),
             ],
         ]
+
         markup = InlineKeyboardMarkup(buttons)
+
         text = (
             f"<a href=tg://user?id={message.from_user.id}>"
             f"{message.from_user.first_name} {message.from_user.last_name or ''}</a>\n\n"
@@ -50,35 +52,30 @@ async def start_command(client, message):
     group_count = await groupdb.count_all_groups()
     text = TEXT_START.format(user.mention, user.id, group_count)
 
-    # pastikan sudah ada bot.me.username (diinit saat start bot)
     username = (await bot.get_me()).username
 
     keyboard = InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
-                    "✚ Add To Your Group", 
-                    url=f"https://t.me/{username}?startgroup=true",
-                    style=enums.ButtonStyle.PRIMARY
+                    "✚ Add To Your Group",
+                    url=f"https://t.me/{username}?startgroup=true"
                 )
             ],
             [
                 InlineKeyboardButton(
-                    "Commands", 
-                    callback_data="CB_HELP",
-                    style=enums.ButtonStyle.PRIMARY
+                    "Commands",
+                    callback_data="CB_HELP"
                 ),
                 InlineKeyboardButton(
-                    "Owner", 
-                    url=f"https://t.me/{COWNER.OWNER_USERNAME}",
-                    style=enums.ButtonStyle.PRIMARY
+                    "Owner",
+                    url=f"https://t.me/{COWNER.OWNER_USERNAME}"
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    "Close", 
-                    callback_data="CB_CLOSE",
-                    style=enums.ButtonStyle.DANGER
+                    "Close",
+                    callback_data="CB_CLOSE"
                 )
             ],
         ]
@@ -89,3 +86,4 @@ async def start_command(client, message):
         caption=text,
         reply_markup=keyboard,
     )
+```
